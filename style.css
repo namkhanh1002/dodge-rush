@@ -1,0 +1,419 @@
+/* ============================================================
+   DODGE RUSH - Giao diện arcade neon (cyan / tím / hồng)
+   ============================================================ */
+
+:root {
+  --bg: #070b18;
+  --cyan: #22d3ee;
+  --violet: #a855f7;
+  --pink: #ec4899;
+  --text: #e8f6ff;
+  --muted: #8aa2c7;
+  --panel: rgba(10, 16, 34, 0.82);
+  --line: rgba(34, 211, 238, 0.35);
+  --radius: 14px;
+  --ease: cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(900px 500px at 15% -10%, rgba(34, 211, 238, 0.14), transparent 60%),
+    radial-gradient(800px 500px at 85% 110%, rgba(168, 85, 247, 0.16), transparent 60%),
+    var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  width: min(96vw, 520px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- HUD ---------- */
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hud__brand {
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.8);
+}
+
+.hud__brand span {
+  color: var(--violet);
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.9);
+}
+
+.hud__stats {
+  display: flex;
+  gap: 8px;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+.pill strong {
+  font-size: 1rem;
+  letter-spacing: 0;
+  color: var(--cyan);
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+}
+
+.pill--best {
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.pill--best strong {
+  color: var(--violet);
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+}
+
+.hud__actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ---------- Nút bấm ---------- */
+.btn {
+  appearance: none;
+  font: inherit;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s var(--ease), box-shadow 0.2s ease, border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.btn:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.45);
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.btn--icon {
+  width: 40px;
+  height: 40px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn--icon.is-active {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
+}
+
+.btn--icon.is-off {
+  opacity: 0.45;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(168, 85, 247, 0.35));
+  border-color: var(--cyan);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.btn--primary:hover {
+  box-shadow: 0 0 26px rgba(34, 211, 238, 0.6);
+}
+
+.btn--big {
+  padding: 0.85rem 2rem;
+  font-size: 1.05rem;
+}
+
+.btn--ghost {
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  border-color: rgba(138, 162, 199, 0.4);
+  color: var(--muted);
+}
+
+.btn--ghost:hover {
+  color: var(--text);
+  border-color: var(--violet);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+}
+
+/* ---------- Khu vực chơi (canvas) ---------- */
+.stage {
+  position: relative;
+  width: min(94vw, calc(78vh * 480 / 720), 480px);
+  aspect-ratio: 480 / 720;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 0 40px rgba(34, 211, 238, 0.22),
+    0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+#game {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: var(--radius);
+  background: #05070f;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* ---------- Badge FPS ---------- */
+.fps-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  font-family: Consolas, monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--cyan);
+  background: rgba(5, 9, 20, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  pointer-events: none;
+}
+
+.fps-badge[hidden] {
+  display: none;
+}
+
+/* ---------- Lớp phủ (menu / tạm dừng / game over) ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: var(--radius);
+  background: rgba(5, 9, 20, 0.84);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  padding: 24px 18px;
+  animation: pop 0.28s var(--ease);
+}
+
+.overlay[hidden] {
+  display: none !important;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.logo {
+  font-size: clamp(2rem, 8vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-shadow: 0 0 18px rgba(34, 211, 238, 0.9);
+}
+
+.logo span {
+  color: var(--violet);
+  text-shadow: 0 0 18px rgba(168, 85, 247, 0.95);
+}
+
+.tagline {
+  color: var(--muted);
+  max-width: 34ch;
+  line-height: 1.5;
+}
+
+.guide {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  font-family: Consolas, monospace;
+  font-size: 0.85em;
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  padding: 1px 6px;
+}
+
+.overlay__title {
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  letter-spacing: 3px;
+  text-shadow: 0 0 16px rgba(34, 211, 238, 0.8);
+}
+
+.overlay__title--over {
+  color: var(--pink);
+  text-shadow: 0 0 18px rgba(236, 72, 153, 0.85);
+}
+
+.record {
+  color: #fde047;
+  font-weight: 700;
+  letter-spacing: 1px;
+  animation: blink 1s infinite;
+}
+
+.record[hidden] {
+  display: none;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.result {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.result > div {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 110px;
+}
+
+.result span {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+.result strong {
+  font-size: 1.5rem;
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.7);
+}
+
+.overlay__row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 420px) {
+  .hud__brand {
+    font-size: 0.9rem;
+  }
+
+  .pill {
+    padding: 4px 8px;
+    font-size: 0.62rem;
+  }
+
+  .pill strong {
+    font-size: 0.9rem;
+  }
+
+  .btn--icon {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .guide {
+    font-size: 0.82rem;
+  }
+
+  .btn--big {
+    padding: 0.75rem 1.6rem;
+    font-size: 0.98rem;
+  }
+}
+
+@media (max-height: 640px) {
+  .stage {
+    width: min(92vw, calc(70vh * 480 / 720));
+  }
+
+  .footer {
+    display: none;
+  }
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="Dodge Rush - Game arcade 2D né chướng ngại vật bằng HTML Canvas" />
+    <title>Dodge Rush — Game né chướng ngại vật</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ============ THANH ĐIỂM (HUD) ============ -->
+      <header class="hud">
+        <div class="hud__brand">DODGE <span>RUSH</span></div>
+
+        <div class="hud__stats">
+          <div class="pill">ĐIỂM <strong id="score">0</strong></div>
+          <div class="pill pill--best">CAO NHẤT <strong id="best">0</strong></div>
+        </div>
+
+        <div class="hud__actions">
+          <button id="btn-sound" class="btn btn--icon" type="button" aria-label="Bật hoặc tắt âm thanh">
+            🔊
+          </button>
+          <button id="btn-fps" class="btn btn--icon" type="button" aria-label="Hiện hoặc ẩn chỉ số FPS">
+            FPS
+          </button>
+          <button id="btn-pause" class="btn btn--icon is-off" type="button" aria-label="Tạm dừng hoặc tiếp tục">
+            ⏸
+          </button>
+        </div>
+      </header>
+
+      <!-- ============ KHU VỰC CHƠI ============ -->
+      <div class="stage">
+        <canvas id="game" width="480" height="720"></canvas>
+
+        <div id="fps" class="fps-badge" hidden>FPS 60</div>
+
+        <!-- Màn hình MENU -->
+        <div id="overlay-menu" class="overlay">
+          <h1 class="logo">DODGE <span>RUSH</span></h1>
+          <p class="tagline">Né chướng ngại vật rơi từ trên xuống — sống càng lâu, điểm càng cao!</p>
+          <ul class="guide">
+            <li><kbd>A</kbd> / <kbd>←</kbd> &nbsp;di chuyển sang trái</li>
+            <li><kbd>D</kbd> / <kbd>→</kbd> &nbsp;di chuyển sang phải</li>
+            <li><kbd>Space</kbd> &nbsp;tạm dừng / tiếp tục</li>
+            <li><kbd>Enter</kbd> &nbsp;bắt đầu / chơi lại</li>
+            <li>📱 Trên điện thoại: chạm và kéo để di chuyển</li>
+          </ul>
+          <button id="btn-play" class="btn btn--primary btn--big" type="button">▶ CHƠI NGAY</button>
+        </div>
+
+        <!-- Màn hình TẠM DỪNG -->
+        <div id="overlay-pause" class="overlay" hidden>
+          <h2 class="overlay__title">TẠM DỪNG</h2>
+          <p class="tagline">Nhấn <kbd>Space</kbd> hoặc nút bên dưới để tiếp tục cuộc chơi.</p>
+          <button id="btn-resume" class="btn btn--primary btn--big" type="button">▶ TIẾP TỤC</button>
+        </div>
+
+        <!-- Màn hình GAME OVER -->
+        <div id="overlay-over" class="overlay" hidden>
+          <h2 class="overlay__title overlay__title--over">GAME OVER</h2>
+          <p id="new-record" class="record" hidden>🏆 KỶ LỤC MỚI!</p>
+          <div class="result">
+            <div>
+              <span>ĐIỂM SỐ</span>
+              <strong id="over-score">0</strong>
+            </div>
+            <div>
+              <span>CAO NHẤT</span>
+              <strong id="over-best">0</strong>
+            </div>
+          </div>
+          <div class="overlay__row">
+            <button id="btn-restart" class="btn btn--primary btn--big" type="button">🔄 CHƠI LẠI</button>
+            <button id="btn-menu" class="btn btn--ghost" type="button">Menu</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        A / D hoặc ← / → để di chuyển · Space để tạm dừng · Chạm và kéo trên điện thoại
+      </footer>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
